@@ -15,58 +15,6 @@ public class MainActivity extends ActionBarActivity {
     ProgressBar pBar;
     TextView tView1, tView2;
 
-    //C4 Async Task
-    public void runAsync(View view){
-        new AsyncCounter().execute("");
-    }
-
-    private class AsyncCounter extends AsyncTask<String, Integer, String> {
-
-        //work for the background,
-        protected String doInBackground(String... params){
-            for(int i = 1; i <=10; i++){
-               tonsOfWork();
-               //for UI update publish it!
-               publishProgress(i);
-            }
-        return "Done";
-        }
-
-        //shows infos during the work
-        protected void onProgressUpdate(Integer... progress){
-            tView2.setText(String.valueOf(progress[0]));
-        }
-
-        //shows infos when work is done
-        protected void onPostExecute(String result){
-            tView2.setText(result);
-        }
-    }
-
-
-    //C3 mit Thread und post method
-    public void startProgress(View view){
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i <= pBar.getMax(); i++){
-                   final int value = i;
-                    tonsOfWork();
-                    //handler for sending messages to the UI
-                    pBar.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            tView1.setText(String.valueOf(value)+"%");
-                            pBar.setProgress(value);
-                        }
-                    });
-                }
-            }
-        };
-        new Thread(runnable).start();
-    }
-
     /*
     //C2 ohne Thread
     public void startProgress(View view){
@@ -77,6 +25,7 @@ public class MainActivity extends ActionBarActivity {
         }
     }
     */
+
 
     /*
     android.view.ViewRootImpl$CalledFromWrongThreadException:
@@ -98,6 +47,58 @@ public class MainActivity extends ActionBarActivity {
         };
         new Thread(runnable).start();
     }*/
+
+    //C3 mit Thread und post method
+    public void startProgress(View view){
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i <= pBar.getMax(); i++){
+                    final int value = i;
+                    tonsOfWork();
+                    //handler for sending messages to the UI
+                    pBar.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            tView1.setText(String.valueOf(value)+"%");
+                            pBar.setProgress(value);
+                        }
+                    });
+                }
+            }
+        };
+        new Thread(runnable).start();
+    }
+
+    //C4 Async Task
+    public void runAsync(View view){
+        new AsyncCounter().execute("");
+    }
+
+    private class AsyncCounter extends AsyncTask<String, Integer, String> {
+
+        //work for the background,
+        protected String doInBackground(String... params){
+            for(int i = 1; i <=10; i++){
+                tonsOfWork();
+                //for UI update publish it!
+                publishProgress(i);
+            }
+            return "Done";
+        }
+
+        //shows infos during the work
+        protected void onProgressUpdate(Integer... progress){
+            tView2.setText(String.valueOf(progress[0]));
+        }
+
+        //shows infos when work is done
+        protected void onPostExecute(String result){
+            tView2.setText(result);
+        }
+    }
+
 
     //tons of work
     private void tonsOfWork(){
