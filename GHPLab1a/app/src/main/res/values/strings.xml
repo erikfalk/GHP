@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">GHPLab1</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_display_message">My Message</string>
+
+    <!-- Button Labels -->
+    <string name="button_1">Knopf</string>
+    <string name="button_dyn">dynamischer Knopf</string>
+    <string name="button_senden">senden</string>
+</resources>
